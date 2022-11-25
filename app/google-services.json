@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "101997292991",
+    "project_id": "apk-api-a2177",
+    "storage_bucket": "apk-api-a2177.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:101997292991:android:9c9974a7bed85f4874c50a",
+        "android_client_info": {
+          "package_name": "com.example.loginapi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "101997292991-kqekdrs7oognna6casmejq3c97ideq3t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzbwxgIJI12xxCkh_A_ofTkHqQ3o58PPU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "101997292991-kqekdrs7oognna6casmejq3c97ideq3t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
