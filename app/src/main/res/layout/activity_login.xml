@@ -37,6 +37,20 @@
         android:layout_height="wrap_content"
         android:text="Login" />
 
+    <TextView
+      android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="don't have an account, Sign in now"/>
+
+    <Button
+        android:layout_marginTop="10dp"
+        android:id="@+id/btn_sign_up"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sign In"/>
+
 
   </LinearLayout>
 </layout>

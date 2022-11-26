@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Login Api</string>
+    <string name="label_must_fill">Wajib diisi</string>
 </resources>

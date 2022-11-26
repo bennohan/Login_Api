@@ -5,6 +5,7 @@ import com.crocodic.core.extension.openActivity
 import com.example.loginapi.R
 import com.example.loginapi.base.activity.BaseActivity
 import com.example.loginapi.databinding.ActivityMainBinding
+import com.example.loginapi.ui.home.HomeActivity
 import com.example.loginapi.ui.login.LoginActivity
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -12,8 +13,12 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : BaseActivity<ActivityMainBinding, MainViewModel>(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.splash {
-            openActivity<LoginActivity>()
+        viewModel.splash {login ->
+            if (login) {
+                openActivity<HomeActivity>()
+            } else {
+                openActivity<LoginActivity>()
+            }
             finish()
         }
     }

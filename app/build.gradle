@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace 'com.example.loginapi'
-    compileSdk 32
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.example.loginapi"
@@ -63,7 +63,7 @@ dependencies {
 
 
     //core
-    implementation 'com.github.crocodic-studio:AndroidCoreProject:4.0.6'
+    implementation 'com.github.crocodic-studio:AndroidCoreProject:4.0.7'
 
     //firebase
     implementation platform('com.google.firebase:firebase-bom:31.0.2')
