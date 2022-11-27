@@ -10,6 +10,7 @@
         android:padding="16dp">
 
         <TextView
+            android:textColor="@color/black"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Hello,Who are you?"
@@ -38,6 +39,8 @@
 
 
         <Button
+            android:textColor="@color/white"
+            android:background="#0099CD"
             android:id="@+id/btn_register"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

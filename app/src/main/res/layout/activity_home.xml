@@ -15,18 +15,23 @@
         android:layout_height="match_parent"
         tools:context=".ui.home.HomeActivity"
         android:padding="16dp"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:gravity="center">
 
         <TextView
+            android:textColor="@color/black"
+            android:textSize="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text='@{"Halo, selamat datang " + user.name}'
             tools:text="Halo, selamat datang Daniel" />
 
         <Button
+            android:textColor="@color/white"
+            android:background="#0099CD"
             android:id="@+id/btn_logout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="180dp"
+            android:layout_height="50dp"
             android:layout_marginTop="16dp"
             android:text="Logout" />
 
