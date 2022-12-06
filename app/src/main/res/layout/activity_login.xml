@@ -41,6 +41,15 @@
         android:layout_height="wrap_content"
         android:text="Login" />
 
+    <Button
+        android:textColor="@color/white"
+        android:background="#0099CD"
+        android:id="@+id/btn_login_biometric"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="Login with Biometric" />
+
     <TextView
       android:layout_marginTop="20dp"
         android:layout_width="match_parent"
@@ -57,7 +66,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign In"/>
-
 
   </LinearLayout>
 </layout>

@@ -2,6 +2,7 @@ package com.example.loginapi.injection
 
 import android.content.Context
 import android.os.Build
+import com.crocodic.core.data.CoreSession
 import com.crocodic.core.helper.okhttp.SSLTrust
 import com.example.loginapi.BuildConfig
 import com.example.loginapi.api.ApiService
@@ -31,6 +32,10 @@ class DataModule {
 
     @Provides
     fun provideGson() = GsonBuilder().setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES).create()
+
+    @Provides
+    fun provideSession(@ApplicationContext context: Context) = CoreSession(context)
+
 
     @Provides
     fun provideOkHttpClient(): OkHttpClient {

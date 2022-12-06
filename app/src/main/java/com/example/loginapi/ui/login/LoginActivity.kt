@@ -1,26 +1,42 @@
 package com.example.loginapi.ui.login
 
 import android.os.Bundle
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
+import androidx.core.view.isInvisible
+import androidx.core.view.isVisible
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.crocodic.core.api.ApiStatus
+import com.crocodic.core.data.CoreSession
 import com.crocodic.core.extension.isEmptyRequired
 import com.crocodic.core.extension.openActivity
 import com.crocodic.core.extension.textOf
+import com.crocodic.core.helper.log.Log
 import com.example.loginapi.R
 import com.example.loginapi.base.activity.BaseActivity
+import com.example.loginapi.data.constant.Cons
 import com.example.loginapi.databinding.ActivityLoginBinding
 import com.example.loginapi.ui.home.HomeActivity
 import com.example.loginapi.ui.register.RegisterActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>(R.layout.activity_login) {
+
+    @Inject
+    lateinit var session: CoreSession
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        binding.btnLoginBiometric.isVisible  = session.getBoolean(Cons.BIOMETRIC)
+
+
         binding.btnLogin.setOnClickListener {
             if (binding.etPhone.isEmptyRequired(R.string.label_must_fill) || binding.etPassword.isEmptyRequired(R.string.label_must_fill)){
                 return@setOnClickListener
@@ -38,6 +54,9 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>(R.layou
                 }
             }
 
+        binding.btnLoginBiometric.setOnClickListener {
+            showBiometricPrompt()
+        }
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -58,6 +77,46 @@ class LoginActivity : BaseActivity<ActivityLoginBinding, LoginViewModel>(R.layou
         }
 
 
+
+
+}
+    private fun showBiometricPrompt() {
+        val builder = BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Biometric Authentication")
+            .setSubtitle("Enter biometric credential to proceed")
+            .setDescription("Input your Fingerprint or FaceID to ensure it's you!")
+            .setNegativeButtonText("Cancel")
+
+        val promptInfo = builder.build()
+
+        val biometricPrompt = initBiometricPrompt {
+            viewModel.login(session.getString(Cons.PHONE), session.getString(Cons.PASSWORD))
+        }
+
+        biometricPrompt.authenticate(promptInfo)
+    }
+
+    private fun initBiometricPrompt(listener: (Boolean) -> Unit): BiometricPrompt {
+        val executor = ContextCompat.getMainExecutor(this)
+
+        val callback = object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                super.onAuthenticationSucceeded(result)
+                listener(true)
+            }
+
+            override fun onAuthenticationFailed() {
+                super.onAuthenticationFailed()
+                listener(false)
+            }
+
+            override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
+                super.onAuthenticationError(errorCode, errString)
+                listener(false)
+            }
+        }
+
+        return BiometricPrompt(this, executor, callback)
 
     }
 }
