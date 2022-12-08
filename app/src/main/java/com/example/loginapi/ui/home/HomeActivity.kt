@@ -1,16 +1,26 @@
 package com.example.loginapi.ui.home
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import androidx.core.widget.doAfterTextChanged
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.crocodic.core.base.adapter.ReactiveListAdapter
+import com.crocodic.core.extension.hideSoftKeyboard
 import com.crocodic.core.extension.openActivity
 import com.example.loginapi.R
-import com.example.loginapi.SettingActivity
+import com.example.loginapi.ui.setting.SettingActivity
 import com.example.loginapi.base.activity.BaseActivity
+import com.example.loginapi.data.user.User
 import com.example.loginapi.data.user.UserDao
 import com.example.loginapi.databinding.ActivityHomeBinding
+import com.example.loginapi.databinding.ItemFriendBinding
 import com.example.loginapi.ui.login.LoginActivity
-import com.example.loginapi.ui.register.RegisterActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -19,8 +29,25 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel> (R.layout.
     @Inject
     lateinit var userDao: UserDao
 
+    private val adapter by lazy {
+        ReactiveListAdapter<ItemFriendBinding, User>(R.layout.item_friend)
+    }
+
+    private val runnable by lazy {
+        Runnable {
+            refreshData()
+        }
+    }
+
+
+    private val handler = Handler(Looper.getMainLooper())
+
+    private var keyword: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        binding.rvFriend.adapter = adapter
 
         userDao.getUser().observe(this) {
             binding.user = it
@@ -40,6 +67,35 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel> (R.layout.
             }
         }
 
+        binding.etSearch.doAfterTextChanged {
+            keyword = if (it.toString().trim().isEmpty()) {
+                null
+            }else {
+                it.toString()
+            }
+            handler.removeCallbacks(runnable)
+            handler.postDelayed(runnable, 1500)
+        }
+
+        binding.etSearch.setOnEditorActionListener{
+            textView, i , keyEvent -> textView.hideSoftKeyboard()
+            true
+        }
+
+        refreshData()
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.friends.collect {
+                    adapter.submitList(it)
+                }
+            }
+        }
+
+    }
+
+    private fun refreshData() {
+        viewModel.getFriends(keyword)
     }
 
     }

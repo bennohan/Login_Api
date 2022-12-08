@@ -58,6 +58,12 @@
         android:gravity="center"
         android:text="don't have an account, Sign in now"/>
 
+<!--    <EditText-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="sign in now"-->
+<!--        android:layout_gravity="center"/>-->
+
     <Button
         android:textColor="@color/white"
         android:background="#0099CD"
@@ -66,6 +72,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Sign In"/>
+
+
 
   </LinearLayout>
 </layout>
