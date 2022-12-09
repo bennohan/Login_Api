@@ -22,5 +22,8 @@ data class User(
     val school: String?,
     @Expose
     @SerializedName("photo")
-    val description: String?
-)
+    val description: String?,
+    @Expose
+    @SerializedName("Likes")
+    val likes: Int?
+    )

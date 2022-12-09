@@ -3,6 +3,8 @@ package com.example.loginapi.ui.home
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.View
+import android.widget.AdapterView
 import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -29,6 +31,8 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel> (R.layout.
     @Inject
     lateinit var userDao: UserDao
 
+    private var friend = ArrayList<User>()
+
     private val adapter by lazy {
         ReactiveListAdapter<ItemFriendBinding, User>(R.layout.item_friend)
     }
@@ -39,6 +43,7 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel> (R.layout.
         }
     }
 
+    private var filter: String? = null
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -77,10 +82,41 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel> (R.layout.
             handler.postDelayed(runnable, 1500)
         }
 
+        binding.spFilter.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                p0: AdapterView<*>?,
+                p1: View?,
+                p2: Int,
+                p3: Long
+            ) {
+                filter = if (p2 == 0) {
+                    null
+                } else {
+                    binding.spFilter.selectedItem as String
+                }
+                refreshData()
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                filter = null
+            }
+
+        }
+
+        binding.cbSort.setOnCheckedChangeListener { compoundButton, b ->
+            if(b) {
+                friend.sortByDescending { it?. likes }
+            }else{
+                friend.sortBy { it?. id }
+            }
+            binding.rvFriend.adapter?.notifyItemChanged(0,friend.size)
+        }
+
         binding.etSearch.setOnEditorActionListener{
             textView, i , keyEvent -> textView.hideSoftKeyboard()
             true
         }
+
 
         refreshData()
 
@@ -92,10 +128,11 @@ class HomeActivity : BaseActivity<ActivityHomeBinding, HomeViewModel> (R.layout.
             }
         }
 
+
     }
 
     private fun refreshData() {
-        viewModel.getFriends(keyword)
+        viewModel.getFriends(keyword, filter )
     }
 
     }
