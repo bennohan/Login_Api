@@ -9,11 +9,14 @@ import com.crocodic.core.api.DataObserver
 import com.crocodic.core.base.adapter.CoreListAdapter
 import com.crocodic.core.base.adapter.CoreListAdapter.Companion.get
 import com.crocodic.core.extension.initLoadMore
+import com.crocodic.core.extension.openActivity
 import com.crocodic.core.extension.tos
 import com.crocodic.core.helper.list.EndlessScrollListener
+import com.example.loginapi.ArticleDetailActivity
 import com.example.loginapi.R
 import com.example.loginapi.base.activity.BaseActivity
 import com.example.loginapi.data.Article
+import com.example.loginapi.data.constant.Cons
 import com.example.loginapi.databinding.ActivityArticleBinding
 import com.example.loginapi.databinding.ItemArticleBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +34,13 @@ class ArticleActivity : BaseActivity<ActivityArticleBinding,ArticleViewModel> (R
         binding.rvArticle.adapter = CoreListAdapter<ItemArticleBinding,Article>(R.layout.item_article)
             .initItem(article) { position, data ->
                 tos(data?.title ?: return@initItem)
+
+                openActivity<ArticleDetailActivity>{
+                    putExtra(Cons.BUNDLE.ARTICLE, data)
+                }
             }
+
+
 
         scrollListener = binding.rvArticle.initLoadMore { page ->
             getData(page + 1)
