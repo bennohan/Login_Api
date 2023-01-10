@@ -12,6 +12,8 @@ import com.crocodic.core.extension.initLoadMore
 import com.crocodic.core.extension.openActivity
 import com.crocodic.core.extension.tos
 import com.crocodic.core.helper.list.EndlessScrollListener
+import com.denzcoskun.imageslider.constants.ScaleTypes
+import com.denzcoskun.imageslider.models.SlideModel
 import com.example.loginapi.ArticleDetailActivity
 import com.example.loginapi.R
 import com.example.loginapi.base.activity.BaseActivity
@@ -32,7 +34,7 @@ class ArticleActivity : BaseActivity<ActivityArticleBinding,ArticleViewModel> (R
         super.onCreate(savedInstanceState)
 
         binding.rvArticle.adapter = CoreListAdapter<ItemArticleBinding,Article>(R.layout.item_article)
-            .initItem(article) { position, data ->
+            .initItem(article) {position, data ->
                 tos(data?.title ?: return@initItem)
 
                 openActivity<ArticleDetailActivity>{
@@ -60,8 +62,10 @@ class ArticleActivity : BaseActivity<ActivityArticleBinding,ArticleViewModel> (R
 
                                 if (data?.page == 1) {
                                     article.clear()
+                                    initSlider(datas as List<Article>)
                                     binding.rvArticle.adapter?.notifyDataSetChanged()
-                                    scrollListener.resetState()
+                                    scrollListener?.resetState()
+
                                 }
 
                                 if (datas?.isNotEmpty() == true) {
@@ -90,6 +94,17 @@ class ArticleActivity : BaseActivity<ActivityArticleBinding,ArticleViewModel> (R
         getData()
 
 }
+
+    private fun initSlider(data: List<Article>) {
+        val imageList = ArrayList<SlideModel>()
+        data.forEach{
+            imageList.add(SlideModel(it.image,it.title))
+        }
+        binding.ivSlider.setImageList(imageList,ScaleTypes.CENTER_CROP)
+    }
+
     private fun getData(page: Int = 1) {
-        viewModel.listArticle(page)    }
+        viewModel.listArticle(page)
+    }
+
 }

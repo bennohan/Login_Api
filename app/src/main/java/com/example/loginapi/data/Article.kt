@@ -23,26 +23,31 @@ class Article (
     val content: String?,
     @Expose
     @SerializedName("image")
-    val image: String?
+    val image: String?,
+    @Expose
+    @SerializedName("resize_image")
+    val resizeImage: String?
 ): Parcelable {
     companion object {
         @JvmStatic
-        @BindingAdapter("image")
-        fun loadImage(imageView: ImageView, image: String?) {
+        @BindingAdapter(value = ["image", "imageThumbnail"], requireAll = false)
+        fun loadImage(imageView: ImageView, image: String?, imageThumbnail: String?) {
+            image?.let{
+                val thumbnail = Glide
+                    .with(imageView.context)
+                    .load(imageThumbnail)
+                    .apply(RequestOptions.centerCropTransform())
             Glide
                 .with(imageView.context)
                 .load(image)
                 .placeholder(R.drawable.loading_image)
                 .error(R.drawable.placeholder)
+                .thumbnail(thumbnail)
                 .apply(RequestOptions.centerCropTransform())
                 .into(imageView)
 
-//            Picasco.get()
-//                .load(image)
-//                .placeholder(R.drawable.loading_image)
-//                .error(R.drawable.try_later)
-//                .into(imageView)
 
         }
     }
+}
 }
